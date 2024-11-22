@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-box {
+    background: #fff;
+    padding: 40px 30px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    text-align: center;
+    width: 350px;
+}
+
+.separator {
+    margin: 20px 0;
+    font-size: 14px;
+    color: #8e8e8e;
+}
+
+.signup-container {
+    margin-top: 20px;
+    font-size: 14px;
+}
