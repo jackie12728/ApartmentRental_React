@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-box {
+    background: #fff;
+    padding: 40px 30px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    text-align: center;
+    width: 350px;
+}
+
+.login-title {
+    font-family: 'Grand Hotel', cursive;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-button {
+    background-color: #0095f6;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.login-button:hover {
+    background-color: #007ae6;
+}
+
+.separator {
+    margin: 20px 0;
+    font-size: 14px;
+    color: #8e8e8e;
+}
+
+.fb-login-button {
+    background-color: #385185;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.fb-login-button:hover {
+    background-color: #2e4a72;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: #385185;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.signup-container {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-link {
+    color: #0095f6;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
