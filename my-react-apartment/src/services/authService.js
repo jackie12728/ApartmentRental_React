@@ -21,18 +21,18 @@ export const checkLoginStatus = async () => {
 
 /**
  * 登入
- * @param {string} username 用戶名
+ * @param {string} email 用戶名
  * @param {string} password 密碼
  * @returns {Promise<Object>} 包含登入結果的 API 回應
  */
-export const login = async (username, password) => {
+export const login = async (email, password) => {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   });
 
   if (!response.ok) {

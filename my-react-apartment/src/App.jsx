@@ -49,9 +49,9 @@ function App() {
     setCartItems([]);
   };
 
-  const handleLogin = async (username, password) => {
+  const handleLogin = async (email, password) => {
     try {
-      const data = await login(username, password); // 使用登入服務方法
+      const data = await login(email, password); // 使用登入服務方法
 
       if (data.message === "登入成功") {
         setIsLoggedIn(true);
