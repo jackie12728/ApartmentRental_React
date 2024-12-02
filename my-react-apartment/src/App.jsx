@@ -11,8 +11,9 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import "./App.css";
-import { checkLoginStatus, login, logout } from "./services/authService";
+import { checkLoginStatus, login, logout, register } from "./services/authService";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -62,6 +63,21 @@ function App() {
       }
     } catch (error) {
       console.error("登入錯誤:", error);
+    }
+  };
+
+  const handleRegister = async (userName, email, password, phoneNumber) => {
+    try {
+      const data = await register(userName, email, password, phoneNumber); // 使用註冊服務方法
+
+      if (data.message === "註冊成功") {
+        alert("註冊成功");
+        window.location.href = "/login";
+      } else {
+        alert("註冊失敗");
+      }
+    } catch (error) {
+      console.error("註冊錯誤", error);
     }
   };
 
@@ -118,7 +134,12 @@ function App() {
           />
           <Route 
             path="/login" 
-            element={<LoginPage onLogin={handleLogin} />} />
+            element={<LoginPage onLogin={handleLogin} />} 
+          />
+          <Route 
+            path="/register" 
+            element={<RegisterPage onRegister={handleRegister} />} 
+          />
         </Routes>
       </div>
       <Footer />
