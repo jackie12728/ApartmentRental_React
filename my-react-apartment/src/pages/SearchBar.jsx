@@ -6,8 +6,8 @@ const SearchBar = () => {
     const [cities, setCities] = useState([]); // 縣市列表
     const [districts, setDistricts] = useState([]); // 區域列表
     const [selectedCity, setSelectedCity] = useState("");
-    const [selectedDistrict, setSelectedDistrict] = useState("");
-    const [budget, setBudget] = useState(""); // 預算選項
+    const [selectedDistricts, setSelectedDistricts] = useState([]); // 區域多選
+    const [budget, setBudget] = useState("");
     const [keyword, setKeyword] = useState("");
 
     // 獲取縣市列表
@@ -46,10 +46,25 @@ const SearchBar = () => {
         fetchRegions();
     }, [selectedCity]);
 
+    // 更新選中的區域，限制最多選擇三個
+    const handleDistrictChange = (districtId) => {
+        if (selectedDistricts.includes(districtId)) {
+            // 如果已選擇，則取消選中
+            setSelectedDistricts(selectedDistricts.filter((id) => id !== districtId));
+        } else {
+            // 如果未選擇，檢查是否超過三個
+            if (selectedDistricts.length < 3) {
+                setSelectedDistricts([...selectedDistricts, districtId]);
+            } else {
+                alert("最多只能選擇三個區域");
+            }
+        }
+    };
+
     const handleSearch = () => {
         const searchParams = {
             city: selectedCity,
-            district: selectedDistrict,
+            districts: selectedDistricts, // 選中的區域
             budget,
             keyword,
         };
@@ -57,47 +72,68 @@ const SearchBar = () => {
     };
 
     return (
-        <div>
+        <div className="search-bar">
             {/* 縣市選單 */}
-            <select onChange={(e) => setSelectedCity(e.target.value)} value={selectedCity}>
+            <select
+                className="dropdown"
+                onChange={(e) => setSelectedCity(e.target.value)}
+                value={selectedCity}
+            >
                 <option value="">縣市</option>
-                {Array.isArray(cities) &&
-                    cities.map((city) => (
-                        <option key={city.id} value={city.id}>
-                            {city.name}
-                        </option>
-                    ))}
-            </select>
-
-            {/* 區域選單 */}
-            <select onChange={(e) => setSelectedDistrict(e.target.value)} value={selectedDistrict}>
-                <option value="">區域</option>
-                {districts.map((district) => (
-                    <option key={district.id} value={district.id}>
-                        {district.name}
+                {cities.map((city) => (
+                    <option key={city.id} value={city.id}>
+                        {city.name}
                     </option>
                 ))}
             </select>
 
+            {/* 區域多選 - 勾選 */}
+            <div className="districts">
+                <p>選擇區域（最多3個）：</p>
+                <div className="checkbox-container">
+                    {districts.map((district) => (
+                        <label key={district.id} className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                value={district.id}
+                                checked={selectedDistricts.includes(district.id)}
+                                onChange={() => handleDistrictChange(district.id)}
+                            />
+                            {district.name}
+                        </label>
+                    ))}
+                </div>
+            </div>
+
             {/* 預算下拉選單 */}
-            <select onChange={(e) => setBudget(e.target.value)} value={budget}>
-                <option value="">不限</option>
-                <option value="5000以下">5,000元以下</option>
-                <option value="5000-10000">5,000-10,000元</option>
-                <option value="10000-15000">10,000-15,000元</option>
-                <option value="15000-20000">15,000-20,000元</option>
-                <option value="20000-40000">20,000-40,000元</option>
-                <option value="40000以上">40,000元以上</option>
+            <select
+                className="dropdown"
+                onChange={(e) => {
+                    const selectedValue = JSON.parse(e.target.value); // 將 JSON 字符串解析為物件
+                    setBudget(selectedValue); // 將解析後的 minRent 和 maxRent 存入 state
+                }}
+            >
+                <option value={JSON.stringify({ minRent: null, maxRent: null })}>不限</option>
+                <option value={JSON.stringify({ minRent: null, maxRent: 5000 })}>5,000元以下</option>
+                <option value={JSON.stringify({ minRent: 5000, maxRent: 10000 })}>5,000-10,000元</option>
+                <option value={JSON.stringify({ minRent: 10000, maxRent: 15000 })}>10,000-15,000元</option>
+                <option value={JSON.stringify({ minRent: 15000, maxRent: 20000 })}>15,000-20,000元</option>
+                <option value={JSON.stringify({ minRent: 20000, maxRent: 40000 })}>20,000-40,000元</option>
+                <option value={JSON.stringify({ minRent: 40000, maxRent: null })}>40,000元以上</option>
             </select>
+
 
             {/* 關鍵字輸入框 */}
             <input
+                className="input"
                 type="text"
                 placeholder="輸入關鍵字"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
             />
-            <button onClick={handleSearch}>搜尋</button>
+            <button className="button" onClick={handleSearch}>
+                搜尋
+            </button>
         </div>
     );
 };
