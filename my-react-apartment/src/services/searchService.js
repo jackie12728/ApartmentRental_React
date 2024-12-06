@@ -39,7 +39,7 @@ export const getRegions = async (cityId) => {
  * @param {string} [params.listingName] 房源名稱
  * @returns {Promise<Object>} 返回房源列表或錯誤信息
  */
-export const searchListings = async ({ cityId, regionIds, minRent, maxRent, listingName }) => {
+export const getListings = async ({ cityId, regionIds, minRent, maxRent, listingName }) => {
     try {
         const queryParams = new URLSearchParams();
         if (cityId) queryParams.append('cityId', cityId);
@@ -75,3 +75,17 @@ export const searchListings = async ({ cityId, regionIds, minRent, maxRent, list
         throw error;
     }
 };
+
+/**
+ * 依據房屋ID查詢房屋圖片
+ * @param {number} listingId
+ * @returns {Promise<Object>}
+ */
+export const getListingImages = async (listingId) => {
+    const response = await fetch(`${API_BASE_URL}/search/listingImage/${listingId}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    if (!response.ok) throw new Error("查詢不到房屋的圖片");
+    return response.json();
+}
