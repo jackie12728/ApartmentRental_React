@@ -27,7 +27,7 @@ export const getRegions = async (cityId) => {
     });
     if (!response.ok) throw new Error("無法取得縣市的所有區域");
     return response.json();
-}
+};
 
 /**
  * 查詢房源列表
@@ -48,27 +48,14 @@ export const getListings = async ({ cityId, regionIds, minRent, maxRent, listing
         if (maxRent) queryParams.append('maxRent', maxRent);
         if (listingName) queryParams.append('listingName', listingName);
 
-        const response = await fetch(`${API_BASE_URL}/searchBar?${queryParams.toString()}`, {
+        const response = await fetch(`${API_BASE_URL}/search/searchBar?${queryParams.toString()}`, {
             method: "GET",
             credentials: "include",
         });
 
         // 如果返回的狀態不是 200，拋出錯誤
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "查詢失敗");
-        }
-
-        // 返回的數據符合 ApiResponse 格式
-        const data = await response.json();
-
-        // 檢查 ApiResponse 是否成功
-        if (data.success) {
-            return data.data; // 返回房源列表
-        } else {
-            throw new Error(data.message || "查詢錯誤");
-        }
-
+        if (!response.ok) throw new Error("查詢不到符合的房屋");
+        return response.json();
     } catch (error) {
         // 捕獲錯誤並返回錯誤消息
         console.error("Error fetching listings:", error);
@@ -88,4 +75,4 @@ export const getListingImages = async (listingId) => {
     });
     if (!response.ok) throw new Error("查詢不到房屋的圖片");
     return response.json();
-}
+};

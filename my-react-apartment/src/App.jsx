@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ListingDetails from "./pages/ListingDetails";
 import "./App.css";
 import { checkLoginStatus, login, logout, register } from "./services/authService";
 
@@ -140,6 +141,7 @@ function App() {
             path="/register" 
             element={<RegisterPage onRegister={handleRegister} />} 
           />
+          <Route path="/listing/:id" element={<ListingDetails />} />
         </Routes>
       </div>
       <Footer />

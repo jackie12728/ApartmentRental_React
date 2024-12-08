@@ -1,0 +1,5 @@
+.root {
+    display: flex;
+    flex-direction: column;  /* 保持垂直排列 */
+    min-height: 100vh;        /* 填滿整個視窗高度 */
+}

@@ -1,0 +1,68 @@
+.search-bar {
+    display: flex;
+    flex-wrap: wrap; /* 搜尋列內容過多時換行 */
+    justify-content: space-between; /* 子項目間距分散 */
+    gap: 16px; /* 搜尋列內部的子項目間距 */
+    padding: 16px;
+    background-color: #f9f9f9; /* 搜尋列背景色 */
+    border: 1px solid #ddd; /* 搜尋列邊框 */
+    border-radius: 8px; /* 搜尋列圓角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 搜尋列陰影效果 */
+}
+
+.dropdown {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.input {
+    padding: 5px;
+    font-size: 14px;
+    width: 150px;
+}
+
+.button {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #5a54d4;
+}
+
+.districts p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.checkbox-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.search-page {
+    display: flex;
+    flex-direction: column; /* 垂直排列搜尋列與卡片區域 */
+    align-items: center; /* 搜尋列和卡片內容水平居中 */
+    width: 100%; /* 滿版寬度 */
+    padding: 16px;
+    box-sizing: border-box; /* 包含內邊距與邊框 */
+}
+
+.search-bar-container {
+    width: 100%; /* 搜尋列的寬度 */
+    max-width: 1200px; /* 設定搜尋列的最大寬度 */
+    margin-bottom: 16px; /* 與卡片區域保持距離 */
+}
