@@ -74,6 +74,8 @@ const SearchBar = () => {
                 listingName: keyword || null,
             };
 
+            
+
             setSearchParams(params); // 儲存搜尋參數
 
             // 調用主 API 獲取房源列表

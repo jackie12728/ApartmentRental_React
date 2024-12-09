@@ -7,7 +7,7 @@
     max-width: 1200px; /* 卡片區域的最大寬度 */
     padding: 16px;
     box-sizing: border-box;
-    padding-bottom: 12rem; /* 根據根字體大小設置的間距 */
+    /*padding-bottom: 12rem;  根據根字體大小設置的間距 */
 }
 
 .card {
@@ -44,6 +44,12 @@
 }
 
 /* 分頁按鈕項目 */
+.pagination {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中（如果需要） */
+}
+
 .pagination li {
     margin: 0 5px;
 }

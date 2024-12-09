@@ -1,16 +1,18 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { React, useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
 const ListingDetails = () => {
-    const { state } = useLocation(); // 取得傳遞的 state
-    const navigate = useNavigate(); // 用於返回上一頁
-    const listing = state?.listing;
-    const resultParams = state?.resultParams; // 獲取搜尋狀態
+    const [listing, setListing] = useState(null);
+
+    useEffect(() => {
+        const storedListing = localStorage.getItem("listing");
+        if (storedListing) {
+            setListing(JSON.parse(storedListing));
+        }
+    }, []);
 
     if (!listing) {
         return <Typography variant="h6">找不到相關房源。</Typography>;
@@ -33,6 +35,9 @@ const ListingDetails = () => {
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     租金：{listing.rent} 元/月
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    地址：{listing.address}
                 </Typography>
             </CardContent>
         </Card>

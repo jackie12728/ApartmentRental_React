@@ -28,6 +28,7 @@ h1, h2 {
 .content {
   max-width: 800px;
   margin: 0 auto;
-  padding-top: 100px; /* 確保內容不會被固定的 Navbar 覆蓋 */
+  padding-top: 8rem; /* 確保內容不會被固定的 Navbar 覆蓋 */
+  padding-bottom: 6rem;
   flex-grow: 1;  /* 使內容區域填滿剩餘空間 */
 }
