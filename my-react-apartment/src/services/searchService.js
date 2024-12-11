@@ -25,7 +25,9 @@ export const getRegions = async (cityId) => {
         method: "GET",
         credentials: "include",
     });
-    if (!response.ok) throw new Error("無法取得縣市的所有區域");
+    if (!response.ok) { 
+        throw new Error("無法取得縣市的所有區域");
+    }
     return response.json();
 };
 

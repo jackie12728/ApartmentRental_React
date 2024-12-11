@@ -11,7 +11,6 @@ const SearchBar = () => {
     const [budget, setBudget] = useState("");                       // 選擇的預算
     const [keyword, setKeyword] = useState("");                     // 搜尋的關鍵字
     const [searchResults, setSearchResults] = useState([]);         // 搜尋結果
-    const [searchParams, setSearchParams] = useState({});           // 傳遞搜尋的參數
 
     // 獲取縣市列表
     useEffect(() => {
@@ -73,10 +72,6 @@ const SearchBar = () => {
                 maxRent: budget.maxRent || null,
                 listingName: keyword || null,
             };
-
-            
-
-            setSearchParams(params); // 儲存搜尋參數
 
             // 調用主 API 獲取房源列表
             const response = await getListings(params);
