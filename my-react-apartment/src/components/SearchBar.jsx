@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getAllCities, getRegions, getListings } from "../services/searchService";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import CardActionArea from "@mui/material/CardActionArea";
+import ReactPaginate from "react-paginate";
 import "./SearchBar.css";
-import SearchResults from "../components/SearchResults";
 
 const SearchBar = () => {
     const [cities, setCities] = useState([]);                       // 縣市列表
@@ -11,6 +16,7 @@ const SearchBar = () => {
     const [budget, setBudget] = useState("");                       // 選擇的預算
     const [keyword, setKeyword] = useState("");                     // 搜尋的關鍵字
     const [searchResults, setSearchResults] = useState([]);         // 搜尋結果
+    const [currentPage, setCurrentPage] = useState(0);              // 當前頁數
 
     // 獲取縣市列表
     useEffect(() => {
@@ -85,11 +91,28 @@ const SearchBar = () => {
             }));
 
             setSearchResults(listings); // 更新搜尋結果
+            setCurrentPage(0); // 頁碼回到第一頁
         } catch (error) {
             console.error("搜尋失敗：", error.message);
             alert("搜尋失敗，請稍後再試！");
         }
     };
+
+    const itemsPerPage = 4; // 每頁顯示的項目數量
+
+    // 計算分頁數量
+    const pageCount = Math.ceil(searchResults.length / itemsPerPage);
+
+    // 處理頁碼點擊
+    const handlePageChange = (data) => {
+        setCurrentPage(data.selected);
+    };
+
+    // 根據當前頁碼選取顯示的結果
+    const displayedResults = searchResults.slice(
+        currentPage * itemsPerPage,
+        (currentPage + 1) * itemsPerPage
+    );
 
     return (
         <div className="search-page">
@@ -165,8 +188,62 @@ const SearchBar = () => {
             </div>
             <br />
 
-            {/* 使用 SearchResults 組件 */}
-            <SearchResults results={searchResults} />
+            {/* 搜尋結果 */}
+            <div>
+                <div className="search-results">
+                    {/* 顯示搜尋結果 */}
+                    {displayedResults.map((listing) => (
+                        <Card key={listing.id} className="card" sx={{ maxWidth: 345 }}>
+                            <a
+                                href={`/listing/${listing.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer" // 安全性措施，防止跨站點腳本攻擊
+                                style={{ textDecoration: "none" }}
+                                onClick={() => {
+                                    localStorage.setItem("listing", JSON.stringify(listing));
+                                }}
+                            >
+
+                                <CardActionArea>
+                                    <CardMedia
+                                        component="img"
+                                        height="140"
+                                        image={listing.imageUrl}
+                                        alt={listing.listingname}
+                                    />
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            {listing.listingname || "未命名房源"}
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                                            {listing.description || "此房源尚無詳細描述。"}
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ color: "primary.main", marginTop: 1 }}>
+                                            租金：{listing.rent} 元/月
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </a>
+                        </Card>
+                    ))}
+
+                </div>
+                <div>
+                    {/* 分頁 */}
+                    <ReactPaginate
+                        // key={currentPage} // 使用 key 來強制重新渲染
+                        previousLabel={"上一頁"}
+                        nextLabel={"下一頁"}
+                        breakLabel={"..."}
+                        pageCount={pageCount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageChange}
+                        containerClassName={"pagination"}
+                        activeClassName={"active"}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

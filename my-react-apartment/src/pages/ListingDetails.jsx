@@ -26,9 +26,9 @@ const ListingDetails = () => {
     const handleSearch = async () => {
         try {
             // 調用 API 獲取預約列表，從返回的數據中提取 data
-            console.log(listing.id);
             const appointments = await getAppointments(Number(listing.id)).data;
-            
+            console.log(listing.id);
+            console.log(appointments);
             setSearchResults(appointments); // 更新搜尋結果
         } catch (error) {
             console.error("搜尋預約紀錄失敗：", error.message);
