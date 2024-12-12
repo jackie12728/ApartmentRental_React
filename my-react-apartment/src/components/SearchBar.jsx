@@ -5,6 +5,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
 import ReactPaginate from "react-paginate";
 import "./SearchBar.css";
 
@@ -180,9 +182,13 @@ const SearchBar = () => {
                         />
                         &nbsp;&nbsp;&nbsp;
 
-                        <button className="button" onClick={handleSearch}>
+                        <Button variant="contained" size="small" onClick={handleSearch} endIcon={<SearchIcon />}>
                             搜尋
-                        </button>
+                        </Button>
+
+                        {/* <button className="button" onClick={handleSearch}>
+                            搜尋
+                        </button> */}
                     </div>
                 </div>
             </div>
