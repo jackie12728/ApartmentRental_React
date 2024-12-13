@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { getAppointments, saveAppointment } from "../services/appointmentService";
+import { checkLoginStatus, getCurrentUserId } from "../services/authService";
 import { format } from "date-fns";
 import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -10,13 +11,15 @@ import Stack from '@mui/material/Stack';
 import Typography from "@mui/material/Typography";
 
 const ListingDetails = () => {
-    const [listing, setListing] = useState(null);
-    const [searchResults, setSearchResults] = useState([]); // 搜尋結果
-    const [selectedTime, setSelectedTime] = useState(null);
-    const availableTimes = ["01:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
+    const [listing, setListing] = useState(null);             // 從 SearchBar 點進來的房屋
+    const [searchResults, setSearchResults] = useState([]);   // 搜尋結果
+    const [selectedDate, setSelectedDate] = useState('');     // 使用者選擇的日期
+    const [selectedTime, setSelectedTime] = useState(null);   // 使用者點選的時段
+    const [currentUserId, setCurrentUserId] = useState([]); // 當前使用者 ID
+    const availableTimes = [
+        "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
         "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
-    const [selectedDate, setSelectedDate] = useState(''); // 添加這行來保存用戶選擇的日期
 
     const handleTimeSelect = (time) => {
         setSelectedTime(time);
@@ -24,6 +27,13 @@ const ListingDetails = () => {
 
     // 獲取今天的日期（YYYY-MM-DD 格式）
     const today = format(new Date(), "yyyy-MM-dd");
+
+    // const checkLoggedIn = async () => {
+    //     if (!isLoggedIn) {
+    //         setCheckoutMessage("請先登入以提交預約");
+    //         return;
+    //     }
+    // };
 
     useEffect(() => {
         const storedListing = localStorage.getItem("listing");
@@ -49,6 +59,16 @@ const ListingDetails = () => {
         }
     }, [listing]); // 監聽 listing 的變化
 
+    useEffect(() => {
+        // checkLoggedIn();
+        const fetchCurrentUserId = async () => {
+            const userId = await getCurrentUserId();
+            setCurrentUserId(userId.data);
+        };
+
+        fetchCurrentUserId();
+    }, []);
+
     // 檢查按鈕是否禁用邏輯
     const isTimeUnavailable = (date, time) => {
         return searchResults.some(
@@ -59,6 +79,15 @@ const ListingDetails = () => {
     if (!listing) {
         return <Typography variant="h6">找不到相關房源。</Typography>;
     }
+
+    const handleSave = async () => {
+        fetchCurrentUserId();
+        const params = {
+            listingId: listing.id,
+        };
+        console.log("listingId: " + listing.id);
+        console.log("userId: " + currentUserId[0]);
+    };
 
     return (
         <Card sx={{ maxWidth: 600, margin: "20px auto" }}>
@@ -105,12 +134,11 @@ const ListingDetails = () => {
                         />
                     </Typography>
                 </div>
-                {console.log("selectedDate: " + selectedDate)}
 
                 <br />
 
                 <Typography variant="body1">
-                    {"選擇時間"}
+                    {"選擇時間："}
                 </Typography>
                 {availableTimes.map((time) => {
                     // 將時間轉為 Date 物件
@@ -118,7 +146,6 @@ const ListingDetails = () => {
                     const [year, month, date] = selectedDate.split("-").map(Number);
                     const currentDate = new Date(); // 當前時間
                     const timeDate = new Date(); // 提供給每個待選擇的時間判斷用
-                    // timeDate.setFullYear(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
                     timeDate.setFullYear(year, month - 1, date);
                     timeDate.setHours(hours, minutes, 0, 0);
 
@@ -155,16 +182,8 @@ const ListingDetails = () => {
                 <br />
                 <br />
 
-                <div style={{ marginTop: "20px" }}>
-                    <p>好消息！還有 {availableTimes.length} 個時段可供預訂</p>
-                </div>
-
-                <br />
-                <br />
-
-                {/* onClick={e} */}
                 <Stack direction="row">
-                    <Button variant="contained" size="large" endIcon={<CalendarMonthIcon />}>
+                    <Button variant="contained" size="large" endIcon={<CalendarMonthIcon />} onClick={handleSave}>
                         預約看房
                     </Button>
                 </Stack>
