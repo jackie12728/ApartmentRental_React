@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css"; // 引入樣式
 
-function Navbar({ cartCount, isLoggedIn, onLogout }) {
+function Navbar({ isLoggedIn, onLogout, currentUser }) {
   return (
     <nav className="navbar">
       <h2 className="navbar-title">QuickLease</h2>
@@ -10,16 +10,13 @@ function Navbar({ cartCount, isLoggedIn, onLogout }) {
         <li>
           <Link to="/">首頁</Link>
         </li>
-        <li>
-          <Link to="/products">商品</Link>
-        </li>
-        <li>
-          <Link to="/cart">購物車 ({cartCount})</Link>
-        </li>
         {isLoggedIn ? (
           <>
+            <li className="navbar-username">
+              {currentUser.username}
+            </li>
             <li>
-              <Link to="/checkout">查看結帳</Link>
+              <Link to="/dashboard">會員中心</Link>
             </li>
             <li>
               <button onClick={onLogout} className="navbar-button">

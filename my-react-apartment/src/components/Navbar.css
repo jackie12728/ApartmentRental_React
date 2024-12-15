@@ -31,3 +31,10 @@
     text-decoration: underline;
   }
   
+  .navbar-username {
+    font-weight: bold; /* 粗體 */
+    color: #fff;
+    display: flex;
+    align-items: center;  /* 垂直置中 */
+  }
+  

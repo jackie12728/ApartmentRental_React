@@ -7,18 +7,16 @@ import {
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ListingDetails from "./pages/ListingDetails";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
-import { checkLoginStatus, login, logout, register } from "./services/authService";
+import { checkLoginStatus, login, logout, register, getCurrentUser } from "./services/authService";
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState([]);
 
   useEffect(() => {
     const initializeLoginStatus = async () => {
@@ -34,22 +32,18 @@ function App() {
     initializeLoginStatus();
   }, []);
 
-  const addToCart = (product) => {
-    const item = {
-      product: product,
-      quantity: 1,
-    }
-    console.log(item);
-    setCartItems([...cartItems, item]);
-  };
+  useEffect(() => {
+    const initializeCurrentUser = async () => {
+      try {
+        const response = await getCurrentUser();
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error("無法查詢當前使用者: ", error);
+      }
+    };
 
-  const removeFromCart = (indexToRemove) => {
-    setCartItems(cartItems.filter((_, index) => index !== indexToRemove));
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
+    initializeCurrentUser();
+  }, []);
 
   const handleLogin = async (email, password) => {
     try {
@@ -105,43 +99,32 @@ function App() {
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       {/* 使用了新的 future flag，讓相對路徑解析行為提前符合 v7 的邏輯 */}
       <Navbar
-        cartCount={cartItems.length}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
+        currentUser={currentUser}
       />
       <div className="content">
         <Routes>
-          <Route 
-            path="/" 
-            element={<Home />} />
           <Route
-            path="/products"
-            element={<Products addToCart={addToCart} isLoggedIn={isLoggedIn} />}
+            path="/"
+            element={<Home />} 
           />
           <Route
-            path="/cart"
-            element={
-              <Cart
-                cartItems={cartItems}
-                removeFromCart={removeFromCart}
-                clearCart={clearCart}
-                isLoggedIn={isLoggedIn}
-              />
-            }
+            path="/login"
+            element={<LoginPage onLogin={handleLogin} />}
           />
           <Route
-            path="/checkout"
-            element={isLoggedIn ? <Checkout /> : <p>請先登入以進行結帳。</p>}
+            path="/register"
+            element={<RegisterPage onRegister={handleRegister} />}
+          />
+          <Route
+            path="/listing/:id"
+            element={<ListingDetails isLoggedIn={isLoggedIn} currentUser={currentUser} />}
           />
           <Route 
-            path="/login" 
-            element={<LoginPage onLogin={handleLogin} />} 
+            path="/dashboard"
+            element={<Dashboard />}
           />
-          <Route 
-            path="/register" 
-            element={<RegisterPage onRegister={handleRegister} />} 
-          />
-          <Route path="/listing/:id" element={<ListingDetails />} />
         </Routes>
       </div>
       <Footer />

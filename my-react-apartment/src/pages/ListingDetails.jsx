@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import { getAppointments, saveAppointment } from "../services/appointmentService";
-import { checkLoginStatus, getCurrentUserId } from "../services/authService";
 import { format } from "date-fns";
 import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -10,12 +9,11 @@ import CardMedia from "@mui/material/CardMedia";
 import Stack from '@mui/material/Stack';
 import Typography from "@mui/material/Typography";
 
-const ListingDetails = () => {
-    const [listing, setListing] = useState(null);             // 從 SearchBar 點進來的房屋
-    const [searchResults, setSearchResults] = useState([]);   // 搜尋結果
-    const [selectedDate, setSelectedDate] = useState('');     // 使用者選擇的日期
-    const [selectedTime, setSelectedTime] = useState(null);   // 使用者點選的時段
-    const [currentUserId, setCurrentUserId] = useState([]); // 當前使用者 ID
+function ListingDetails({isLoggedIn, currentUser}) {
+    const [listing, setListing] = useState(null);           // 從 SearchBar 點進來的房屋
+    const [searchResults, setSearchResults] = useState([]); // 搜尋預約結果
+    const [selectedDate, setSelectedDate] = useState('');   // 使用者選擇的日期
+    const [selectedTime, setSelectedTime] = useState(null); // 使用者點選的時段
     const availableTimes = [
         "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
         "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"
@@ -27,13 +25,6 @@ const ListingDetails = () => {
 
     // 獲取今天的日期（YYYY-MM-DD 格式）
     const today = format(new Date(), "yyyy-MM-dd");
-
-    // const checkLoggedIn = async () => {
-    //     if (!isLoggedIn) {
-    //         setCheckoutMessage("請先登入以提交預約");
-    //         return;
-    //     }
-    // };
 
     useEffect(() => {
         const storedListing = localStorage.getItem("listing");
@@ -59,16 +50,6 @@ const ListingDetails = () => {
         }
     }, [listing]); // 監聽 listing 的變化
 
-    useEffect(() => {
-        // checkLoggedIn();
-        const fetchCurrentUserId = async () => {
-            const userId = await getCurrentUserId();
-            setCurrentUserId(userId.data);
-        };
-
-        fetchCurrentUserId();
-    }, []);
-
     // 檢查按鈕是否禁用邏輯
     const isTimeUnavailable = (date, time) => {
         return searchResults.some(
@@ -81,13 +62,20 @@ const ListingDetails = () => {
     }
 
     const handleSave = async () => {
-        fetchCurrentUserId();
-        const params = {
-            listingId: listing.id,
-        };
-        console.log("listingId: " + listing.id);
-        console.log("userId: " + currentUserId[0]);
+        if (!isLoggedIn) {
+            alert("請先登入以提交預約");
+            return;
+        }
+    
+        try {
+            saveAppointment(listing.id, currentUser.id, selectedDate, selectedTime);
+            alert("預約提交成功！");
+        } catch (error) {
+            console.error("錯誤：", error.message);
+            alert("提交預約時發生錯誤，請稍後再試！");
+        }
     };
+    
 
     return (
         <Card sx={{ maxWidth: 600, margin: "20px auto" }}>

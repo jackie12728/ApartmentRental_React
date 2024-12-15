@@ -88,8 +88,8 @@ export const logout = async () => {
  * 取得當前使用者的 ID
  * @returns {Promise<Object} 包含使用者 ID 的 API 回應
  */
-export const getCurrentUserId = async () => {
-  const response = await fetch(`${API_BASE_URL}/auth/getCurrentUserId`, {
+export const getCurrentUser = async () => {
+  const response = await fetch(`${API_BASE_URL}/auth/getCurrentUser`, {
     method: "GET",
     credentials: "include",
   });

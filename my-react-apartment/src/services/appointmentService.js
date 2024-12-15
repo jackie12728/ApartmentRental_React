@@ -25,6 +25,7 @@ export const getAppointments = async (listingId) => {
  * @param {number} userId 租客ID
  * @param {string} appointmentDate 預約日期
  * @param {string} appointmentTime 預約時間
+ * @returns {Promise<Object>}
  */
 export const saveAppointment = async (listingId, userId, appointmentDate, appointmentTime) => {
     const response = await fetch(`${API_BASE_URL}/appoint/appointment`, {
@@ -36,7 +37,11 @@ export const saveAppointment = async (listingId, userId, appointmentDate, appoin
         body: JSON.stringify({ listingId, userId, appointmentDate, appointmentTime }),
     });
 
+    console.log("Request body:", JSON.stringify({ listingId, userId, appointmentDate, appointmentTime }));
+
     if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error("Error response:", errorResponse);
         throw new Error("預約失敗");
     }
 
