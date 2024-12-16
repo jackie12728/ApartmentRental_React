@@ -27,8 +27,11 @@ h1, h2 {
 
 .content {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 0 0 15em;
   padding-top: 8rem; /* 確保內容不會被固定的 Navbar 覆蓋 */
   padding-bottom: 6rem;
   flex-grow: 1;  /* 使內容區域填滿剩餘空間 */
+  justify-content: center;  /* 水平居中 */
+  align-items: center;      /* 垂直居中 */
+  height: 100vh;            /* 設置容器高度為視窗高度，確保垂直居中 */
 }

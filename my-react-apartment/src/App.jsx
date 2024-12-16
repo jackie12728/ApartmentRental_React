@@ -123,7 +123,7 @@ function App() {
           />
           <Route 
             path="/dashboard"
-            element={<Dashboard />}
+            element={<Dashboard currentUser={currentUser} />}
           />
         </Routes>
       </div>

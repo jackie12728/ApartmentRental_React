@@ -56,6 +56,8 @@ function RegisterPage({ onRegister }) {
                         inputmode="tel"
                         required
                         className="login-input"
+                        maxLength={10}  // 限制輸入最多 10 個字符
+                        pattern="[0-9]*"  // 確保只允許數字輸入
                     />
                     <button type="submit" className="login-button">註冊</button>
                 </div>

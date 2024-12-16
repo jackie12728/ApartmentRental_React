@@ -1,0 +1,78 @@
+/* 容器設置 */
+.profile-info-container {
+    width: 100%;
+    max-width: 2000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 標題 */
+.profile-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 頭像與名稱 */
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.profile-name h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #555;
+}
+
+.edit-button {
+    padding: 8px 12px;
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-button:hover {
+    background-color: #357ae8;
+}
+
+/* 表格樣式 */
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.profile-table .label {
+    font-weight: bold;
+    padding: 10px;
+    background-color: #f9f9f9;
+    color: #444;
+    width: 30%;
+}
+
+.profile-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-table tr:last-child td {
+    border-bottom: none;
+}
