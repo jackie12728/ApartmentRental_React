@@ -1,0 +1,4 @@
+.centered-div {
+    width: 60%;             /* 設定寬度 */
+    margin: 5rem auto 0;    /* 上邊距 5rem，左右自動居中 */
+}

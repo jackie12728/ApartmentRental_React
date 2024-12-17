@@ -1,6 +1,7 @@
 /* 父容器設置 */
 .app-container {
     display: flex; /* 使用 flexbox 來排列側邊欄和主內容 */
+    justify-content: center; /* 水平居中 */
 }
 
 /* 側邊欄樣式 */
@@ -20,10 +21,8 @@
 /* 主內容區域樣式 */
 .main-content {
     flex: 1; /* 填滿剩餘空間 */
-    margin-top: 60px; /* 上方列高度 */
-    margin-bottom: 40px; /* 下方列高度 */
-    margin-left: 200px; /* 側邊欄的寬度 */
-    padding: 20px;
+    margin: 6rem 15rem;
+    max-width: 50rem;
     background-color: #f9f9f9;
     overflow-y: auto; /* 超出內容可滾動 */
 }

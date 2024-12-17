@@ -24,10 +24,9 @@ h1, h2 {
 }
 
 .content {
-  max-width: 600px;
-  margin: 0 auto;    /* 水平居中 */
-  padding-top: 8rem; /* 確保內容不會被固定的 Navbar 覆蓋 */
-  padding-bottom: 6rem;
-  flex-grow: 1;      /* 使內容區域填滿剩餘空間 */
-  height: 100vh;     /* 設置容器高度為視窗高度，確保垂直居中 */
+  width: 100%;               /* 讓內容寬度隨視窗大小調整 */
+  margin: auto;            /* 水平居中 */
+  flex-grow: 1;              /* 使內容區域填滿剩餘空間 */
+  height: 100vh;             /* 高度為視窗高度 */
+  box-sizing: border-box;    /* 包括 padding 和 border 在內的尺寸計算 */
 }

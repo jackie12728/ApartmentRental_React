@@ -85,8 +85,8 @@ export const logout = async () => {
 };
 
 /**
- * 取得當前使用者的 ID
- * @returns {Promise<Object} 包含使用者 ID 的 API 回應
+ * 取得當前使用者資料
+ * @returns {Promise<Object} 包含使用者資料的 API 回應
  */
 export const getCurrentUser = async () => {
   const response = await fetch(`${API_BASE_URL}/auth/getCurrentUser`, {
@@ -100,3 +100,25 @@ export const getCurrentUser = async () => {
 
   return response.json();
 };
+
+/**
+ * @param {number} id 使用者 ID
+ * @param {string} phoneNumber 使用者電話號碼
+ * @returns {Promise<Object>} 包含儲存結果的 API 回應
+ */
+export const updateUserPhoneNumber = async (id, phoneNumber) => {
+  const response = await fetch(`${API_BASE_URL}/auth/updateUserPhoneNumber`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ id, phoneNumber }),
+  });
+
+  if (!response.ok) {
+    throw new Error("電話號碼更新失敗");
+  }
+
+  return response.json();
+}
