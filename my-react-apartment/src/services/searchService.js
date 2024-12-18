@@ -78,3 +78,17 @@ export const getListingImages = async (listingId) => {
     if (!response.ok) throw new Error("查詢不到房屋的圖片");
     return response.json();
 };
+
+/**
+ * 依據使用者ID查詢預約紀錄和房屋資料
+ * @param {number} userId
+ * @returns {Promise<Object>}
+ */
+export const getUserAppointments = async (userId) => {
+    const response = await fetch(`${API_BASE_URL}/search/userAppointments/${userId}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    if (!response.ok) throw new Error("查詢不到預約紀錄");
+    return response.json();
+}
