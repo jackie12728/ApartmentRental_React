@@ -59,6 +59,7 @@
     width: 100%; /* 滿版寬度 */
     padding: 16px;
     box-sizing: border-box; /* 包含內邊距與邊框 */
+    padding-bottom: 6rem; /* 調整內部底部距離 */
 }
 
 .search-bar-container {
