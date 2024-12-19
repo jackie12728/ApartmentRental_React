@@ -6,6 +6,21 @@ import { getUserAppointments } from "../services/searchService";
 
 function ReservationRecords({ currentUser }) {
     const [appointments, setAppointments] = useState([]); // 預約紀錄
+
+    // 獲取預約列表
+    useEffect(() => {
+        const fetchAppointments = async () => {
+            try {
+                const appointmentsData = await getUserAppointments(Number(currentUser.id));
+                setAppointments(appointmentsData.data);
+            } catch (error) {
+                console.error("獲取預約紀錄失敗：", error.message);
+            }
+        };
+
+        fetchAppointments();
+    }, []);
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'firstName', headerName: 'First name', width: 130 },
@@ -39,23 +54,6 @@ function ReservationRecords({ currentUser }) {
     ];
 
     const paginationModel = { page: 0, pageSize: 5 };
-
-    // 獲取預約列表
-    useEffect(() => {
-        const fetchAppointments = async () => {
-            try {
-                console.log("currentUser.userId: " + Number(currentUser.userId));
-                // const appointmentsData = await getUserAppointments(Number(currentUser.userId));
-                // // const appointmentsData = await getUserAppointments(1);
-                // setAppointments(appointmentsData.data);
-                // console.log("appointmentsData.data: " + appointmentsData.data);
-            } catch (error) {
-                console.error("獲取預約紀錄失敗：", error.message);
-            }
-        };
-
-        fetchAppointments();
-    }, []);
 
     function DataTable() {
         return (
