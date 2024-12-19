@@ -89,6 +89,10 @@ export const getUserAppointments = async (userId) => {
         method: "GET",
         credentials: "include",
     });
-    if (!response.ok) throw new Error("查詢不到預約紀錄");
+    if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error("Error response: ", errorResponse);
+        throw new Error("查詢不到預約紀錄");
+    }
     return response.json();
-}
+};

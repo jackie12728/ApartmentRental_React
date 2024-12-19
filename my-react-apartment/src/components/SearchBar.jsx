@@ -100,7 +100,7 @@ const SearchBar = () => {
         }
     };
 
-    const itemsPerPage = 4; // 每頁顯示的項目數量
+    const itemsPerPage = 6; // 每頁顯示的項目數量
 
     // 計算分頁數量
     const pageCount = Math.ceil(searchResults.length / itemsPerPage);
@@ -185,10 +185,6 @@ const SearchBar = () => {
                         <Button variant="contained" size="small" onClick={handleSearch} endIcon={<SearchIcon />}>
                             搜尋
                         </Button>
-
-                        {/* <button className="button" onClick={handleSearch}>
-                            搜尋
-                        </button> */}
                     </div>
                 </div>
             </div>
