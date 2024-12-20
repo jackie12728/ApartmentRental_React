@@ -20,41 +20,7 @@ const SearchBar = () => {
     const [searchResults, setSearchResults] = useState([]);         // 搜尋結果
     const [currentPage, setCurrentPage] = useState(0);              // 當前頁數
 
-    // 獲取縣市列表
-    useEffect(() => {
-        const fetchCities = async () => {
-            try {
-                const citiesData = await getAllCities();
-                if (Array.isArray(citiesData.data)) {
-                    setCities(citiesData.data); // 提取 data 屬性
-                } else {
-                    console.error("API 返回的縣市數據不是數組");
-                }
-            } catch (error) {
-                console.error("獲取縣市失敗:", error.message);
-            }
-        };
-
-        fetchCities();
-    }, []);
-
-    // 根據選擇的縣市獲取區域列表
-    useEffect(() => {
-        const fetchRegions = async () => {
-            try {
-                if (selectedCity) {
-                    const regionsData = await getRegions(selectedCity);
-                    setDistricts(regionsData.data || []); // 提取 data 或設置為空數組
-                } else {
-                    setDistricts([]);
-                }
-            } catch (error) {
-                console.error("獲取區域失敗:", error.message);
-            }
-        };
-
-        fetchRegions();
-    }, [selectedCity]);
+    
 
     // 更新選中的區域，限制最多選擇三個
     const handleDistrictChange = (districtId) => {
@@ -115,6 +81,76 @@ const SearchBar = () => {
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
     );
+
+    // 獲取縣市列表
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const citiesData = await getAllCities();
+                if (Array.isArray(citiesData.data)) {
+                    setCities(citiesData.data); // 提取 data 屬性
+                } else {
+                    console.error("API 返回的縣市數據不是數組");
+                }
+            } catch (error) {
+                console.error("獲取縣市失敗:", error.message);
+            }
+        };
+
+        fetchCities();
+    }, []);
+
+    // 根據選擇的縣市獲取區域列表
+    useEffect(() => {
+        const fetchRegions = async () => {
+            try {
+                if (selectedCity) {
+                    const regionsData = await getRegions(selectedCity);
+                    setDistricts(regionsData.data || []); // 提取 data 或設置為空數組
+                } else {
+                    setDistricts([]);
+                }
+            } catch (error) {
+                console.error("獲取區域失敗:", error.message);
+            }
+        };
+
+        fetchRegions();
+    }, [selectedCity]);
+
+    // 一進入首頁時先顯示推薦房屋
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            try {
+                const params = {
+                    cityId: 1,
+                    regionIds: null,
+                    minRent: null,
+                    maxRent: null,
+                    listingName: null,
+                };
+    
+                // 調用主 API 獲取房源列表
+                const response = await getListings(params);
+    
+                // 從 API 返回的數據中提取 data
+                const listings = response.data.map((listing) => ({
+                    ...listing,
+                    imageUrl: listing.imagePaths?.[0]
+                        ? `http://localhost:8080${listing.imagePaths[0]}`
+                        : "https://via.placeholder.com/345x140?text=No+Image", // 默認封面
+                }));
+    
+                setSearchResults(listings); // 更新搜尋結果
+                setCurrentPage(0); // 頁碼回到第一頁
+            } catch (error) {
+                console.error("搜尋失敗：", error.message);
+                alert("搜尋失敗，請稍後再試！");
+            }
+        };
+
+        fetchFeatured();
+    }, []);
 
     return (
         <div className="search-page">

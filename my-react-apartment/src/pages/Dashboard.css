@@ -22,7 +22,7 @@
 .main-content {
     flex: 1; /* 填滿剩餘空間 */
     margin: 6rem 15rem;
-    max-width: 50rem;
+    max-width: 55rem;
     background-color: #f9f9f9;
     overflow-y: auto; /* 超出內容可滾動 */
 }
