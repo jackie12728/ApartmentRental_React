@@ -15,7 +15,7 @@ function Dashboard({currentUser}) {
             case "reservations":
                 return <ReservationRecords currentUser={currentUser} />;
             case "favorites":
-                return <FavoriteRecords />;
+                return <FavoriteRecords currentUser={currentUser} />;
             default:
                 return <ProfileInfo />;
         }

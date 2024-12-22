@@ -107,7 +107,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Home />} 
+            element={<Home isLoggedIn={isLoggedIn} />} 
           />
           <Route
             path="/login"

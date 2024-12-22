@@ -15,13 +15,27 @@ export const fetchFavorites = async () => {
 };
 
 /**
- * 新增關注
- * @param {number} userId
- * @param {number} productId
+ * 獲取商品被關注清單
+ * @param {number} listingId
  * @returns {Promise<Object>}
  */
-export const addFavorite = async (productId) => {
-  const response = await fetch(`${API_BASE_URL}/favorites/${productId}`, {
+export const getFavoriteUsers = async () => {
+  const response = await fetch(`${API_BASE_URL}/favorites/${listingId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) throw new Error("無法獲取關注者清單");
+  return response.json();
+};
+
+/**
+ * 新增關注
+ * @param {number} userId
+ * @param {number} listingId
+ * @returns {Promise<Object>}
+ */
+export const addFavorite = async (listingId) => {
+  const response = await fetch(`${API_BASE_URL}/favorites/${listingId}`, {
     method: "POST",
     credentials: "include",
   });
@@ -31,11 +45,11 @@ export const addFavorite = async (productId) => {
 
 /**
  * 移除關注
- * @param {number} productId
+ * @param {number} listingId
  * @returns {Promise<Object>}
  */
-export const removeFavorite = async (productId) => {
-  const response = await fetch(`${API_BASE_URL}/favorites/${productId}`, {
+export const removeFavorite = async (listingId) => {
+  const response = await fetch(`${API_BASE_URL}/favorites/${listingId}`, {
     method: "DELETE",
     credentials: "include",
   });

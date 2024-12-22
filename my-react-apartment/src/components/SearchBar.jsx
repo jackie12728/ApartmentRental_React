@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getAllCities, getRegions, getListings } from "../services/searchService";
+import { addFavorite } from "../services/favoriteService";
+import Button from '@mui/material/Button';
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from '@mui/material/CardActions';
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import CardActionArea from "@mui/material/CardActionArea";
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import IconButton from '@mui/material/IconButton';
 import ReactPaginate from "react-paginate";
+import SearchIcon from '@mui/icons-material/Search';
+import Typography from "@mui/material/Typography";
 import "./SearchBar.css";
 
-const SearchBar = () => {
+function SearchBar({ isLoggedIn }) {
     const [cities, setCities] = useState([]);                       // 縣市列表
     const [districts, setDistricts] = useState([]);                 // 區域列表
     const [selectedCity, setSelectedCity] = useState("");           // 選擇的縣市
@@ -19,8 +23,6 @@ const SearchBar = () => {
     const [keyword, setKeyword] = useState("");                     // 搜尋的關鍵字
     const [searchResults, setSearchResults] = useState([]);         // 搜尋結果
     const [currentPage, setCurrentPage] = useState(0);              // 當前頁數
-
-    
 
     // 更新選中的區域，限制最多選擇三個
     const handleDistrictChange = (districtId) => {
@@ -82,6 +84,22 @@ const SearchBar = () => {
         (currentPage + 1) * itemsPerPage
     );
 
+    // 添加收藏
+    const handleAddFavorite = async (listing) => {
+        if (!isLoggedIn) {
+            alert("請先登入以新增收藏");
+            return;
+        }
+
+        try {
+            addFavorite(listing.id);
+            alert("收藏成功！");
+        } catch (error) {
+            console.error("錯誤：", error.message);
+            alert("提交收藏時發生錯誤，請稍後再試！");
+        }
+    };
+
     // 獲取縣市列表
     useEffect(() => {
         const fetchCities = async () => {
@@ -129,10 +147,10 @@ const SearchBar = () => {
                     maxRent: null,
                     listingName: null,
                 };
-    
+
                 // 調用主 API 獲取房源列表
                 const response = await getListings(params);
-    
+
                 // 從 API 返回的數據中提取 data
                 const listings = response.data.map((listing) => ({
                     ...listing,
@@ -140,7 +158,7 @@ const SearchBar = () => {
                         ? `http://localhost:8080${listing.imagePaths[0]}`
                         : "https://via.placeholder.com/345x140?text=No+Image", // 默認封面
                 }));
-    
+
                 setSearchResults(listings); // 更新搜尋結果
                 setCurrentPage(0); // 頁碼回到第一頁
             } catch (error) {
@@ -262,14 +280,17 @@ const SearchBar = () => {
                                     </CardContent>
                                 </CardActionArea>
                             </a>
+                            <CardActions disableSpacing>
+                                <IconButton aria-label="add to favorites" onClick={() => handleAddFavorite(listing)}>
+                                    <FavoriteIcon />
+                                </IconButton>
+                            </CardActions>
                         </Card>
                     ))}
-
                 </div>
                 <div>
                     {/* 分頁 */}
                     <ReactPaginate
-                        // key={currentPage} // 使用 key 來強制重新渲染
                         previousLabel={"上一頁"}
                         nextLabel={"下一頁"}
                         breakLabel={"..."}
