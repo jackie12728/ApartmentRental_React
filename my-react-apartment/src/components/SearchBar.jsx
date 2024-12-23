@@ -275,7 +275,7 @@ function SearchBar({ isLoggedIn }) {
                                             {listing.description || "此房源尚無詳細描述。"}
                                         </Typography>
                                         <Typography variant="body1" sx={{ color: "primary.main", marginTop: 1 }}>
-                                            租金：{listing.rent} 元/月
+                                        租金：{new Intl.NumberFormat().format(listing.rent)} 元/月
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
