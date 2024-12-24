@@ -5,7 +5,7 @@
     left: 0;         /* 固定在畫面左側 */
     height: calc(100vh - 100px); /* 總高度減去上下列的高度 (60px + 40px) */
     width: 200px;    /* 側邊欄寬度 */
-    background-color: #D1B39E;
+    background-color: #d6c1b2;
     color: #000000;
     padding: 20px;
     overflow-y: auto; /* 超出範圍時可滾動 */

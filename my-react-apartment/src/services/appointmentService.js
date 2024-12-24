@@ -37,11 +37,7 @@ export const saveAppointment = async (listingId, userId, appointmentDate, appoin
         body: JSON.stringify({ listingId, userId, appointmentDate, appointmentTime }),
     });
 
-    console.log("Request body:", JSON.stringify({ listingId, userId, appointmentDate, appointmentTime }));
-
     if (!response.ok) {
-        const errorResponse = await response.json();
-        console.error("Error response: ", errorResponse);
         throw new Error("預約失敗");
     }
 
