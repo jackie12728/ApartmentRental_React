@@ -5,23 +5,24 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Button from '@mui/material/Button';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Paper from '@mui/material/Paper';
-import { getUserAppointments } from "../services/searchService";
+import TabIcon from '@mui/icons-material/Tab';
+import { getUserListing } from "../services/searchService";
 
 function Listings({ currentUser }) {
-    const [appointments, setAppointments] = useState([]); // 預約紀錄
+    const [listings, setListings] = useState([]); // 房屋資料
 
-    // 獲取預約列表
+    // 獲取房屋資料
     useEffect(() => {
-        const fetchAppointments = async () => {
+        const fetchListings = async () => {
             try {
-                const appointmentsData = await getUserAppointments(Number(currentUser.id));
-                setAppointments(appointmentsData.data);
+                const listingsData = await getUserListing(Number(currentUser.id));
+                setListings(listingsData.data);
             } catch (error) {
-                console.error("獲取預約紀錄失敗：", error.message);
+                console.error("獲取房屋資料：", error.message);
             }
         };
 
-        fetchAppointments();
+        fetchListings();
     }, []);
 
     const columns = [
@@ -42,14 +43,14 @@ function Listings({ currentUser }) {
         { 
             field: 'rent', 
             headerName: '房屋租金', 
-            width: 130,
+            width: 110,
             headerAlign: 'center', // 表頭置中
             align: 'center' // 欄位內容置中
         },
         {
             field: 'modify',
             headerName: '編輯房屋',
-            width: 130,
+            width: 110,
             headerAlign: 'center',
             align: 'center',
             renderCell: (params) => (
@@ -66,7 +67,7 @@ function Listings({ currentUser }) {
         {
             field: 'delete',
             headerName: '刪除房屋',
-            width: 130,
+            width: 110,
             headerAlign: 'center',
             align: 'center',
             renderCell: (params) => (
@@ -79,15 +80,31 @@ function Listings({ currentUser }) {
                     刪除
                 </Button>
             )
+        },
+        {
+            field: 'browse',
+            headerName: '瀏覽房屋',
+            width: 110,
+            headerAlign: 'center',
+            align: 'center',
+            renderCell: (params) => (
+                <Button
+                    variant="outlined"
+                    color="info"
+                    onClick={() => handleDelete(params.row.id)}
+                    startIcon = {<TabIcon />}
+                >
+                    瀏覽
+                </Button>
+            )
         }
-        
     ];
 
-    // 動態生成 rows 並加入自動遞增的 id
-    const rows = appointments.map((appointment, index) => ({
-        id: index + 1, // 自動生成 ID
-        listingname: appointment.listingname,
-        address: appointment.address
+    const rows = listings.map((listing) => ({
+        id: listing.id,
+        listingname: listing.listingname,
+        address: listing.address,
+        rent: Number(listing.rent).toLocaleString('zh-TW'), // 格式化為千分位
     }));
 
     const paginationModel = { page: 0, pageSize: 5 };

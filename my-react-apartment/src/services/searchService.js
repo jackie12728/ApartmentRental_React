@@ -90,9 +90,23 @@ export const getUserAppointments = async (userId) => {
         credentials: "include",
     });
     if (!response.ok) {
-        const errorResponse = await response.json();
-        console.error("Error response: ", errorResponse);
         throw new Error("查詢不到預約紀錄");
+    }
+    return response.json();
+};
+
+/**
+ * 依據使用者ID查詢房屋
+ * @param {number} userId
+ * @returns {Promise<Object>}
+ */
+export const getUserListing = async (userId) => {
+    const response = await fetch(`${API_BASE_URL}/search/userListing/${userId}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("查詢不到房屋資料");
     }
     return response.json();
 };
