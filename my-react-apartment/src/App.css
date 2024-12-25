@@ -25,8 +25,7 @@ h1, h2 {
 
 .content {
   width: 100%;               /* 讓內容寬度隨視窗大小調整 */
-  margin: auto;            /* 水平居中 */
+  margin: auto;              /* 水平居中 */
   flex-grow: 1;              /* 使內容區域填滿剩餘空間 */
-  height: 100vh;             /* 高度為視窗高度 */
   box-sizing: border-box;    /* 包括 padding 和 border 在內的尺寸計算 */
 }

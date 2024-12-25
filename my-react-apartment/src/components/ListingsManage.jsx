@@ -3,7 +3,9 @@ import "./ReservationRecords.css";
 import { DataGrid } from '@mui/x-data-grid';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Button from '@mui/material/Button';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import Paper from '@mui/material/Paper';
 import TabIcon from '@mui/icons-material/Tab';
 import { getUserListing } from "../services/searchService";
@@ -31,26 +33,66 @@ function Listings({ currentUser }) {
     }, []);
 
     const columns = [
-        { 
-            field: 'listingname', 
-            headerName: '房屋名稱', 
+        {
+            field: 'listingname',
+            headerName: '房屋名稱',
             width: 180,
             headerAlign: 'center', // 表頭置中
             align: 'center' // 欄位內容置中
         },
-        { 
-            field: 'address', 
-            headerName: '房屋地址', 
+        {
+            field: 'address',
+            headerName: '房屋地址',
             width: 240,
             headerAlign: 'center', // 表頭置中
             align: 'center' // 欄位內容置中
         },
-        { 
-            field: 'rent', 
-            headerName: '房屋租金', 
+        {
+            field: 'rent',
+            headerName: '房屋租金',
             width: 110,
             headerAlign: 'center', // 表頭置中
             align: 'center' // 欄位內容置中
+        },
+        {
+            field: 'rentalId',
+            headerName: '房屋狀態',
+            width: 110,
+            headerAlign: 'center', // 表頭置中
+            renderCell: (params) => {
+                let color = '';
+                let icon = null;
+                let label = ''; // 初始化為空字串
+
+                switch (params.value) {
+                    case 1:
+                        color = '#FFC107'; // 黃色
+                        icon = <HourglassEmptyIcon style={{ color }} />;
+                        label = '待出租';
+                        break;
+                    case 2:
+                        color = '#4CAF50'; // 綠色
+                        icon = <CheckCircleIcon style={{ color }} />;
+                        label = '已出租';
+                        break;
+                    case 3:
+                        color = '#8B0000';
+                        icon = <DeleteForeverIcon style={{ color }} />;
+                        label = '已下架';
+                        break;
+                    default:
+                        color = '#9E9E9E'; // 灰色
+                        icon = null;
+                        label = '';
+                }
+
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center', color, justifyContent: 'center' }}>
+                        {icon}
+                        <span style={{ marginLeft: 8 }}>{label}</span>
+                    </div>
+                );
+            }
         },
         {
             field: 'modify',
@@ -63,26 +105,9 @@ function Listings({ currentUser }) {
                     variant="outlined"
                     color="success"
                     onClick={() => handleEdit(params.row)}
-                    startIcon = {<AutoFixHighIcon />}
+                    startIcon={<AutoFixHighIcon />}
                 >
                     編輯
-                </Button>
-            )
-        },
-        {
-            field: 'delete',
-            headerName: '刪除房屋',
-            width: 110,
-            headerAlign: 'center',
-            align: 'center',
-            renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => handleDelete(params.row.id)}
-                    startIcon = {<DeleteForeverIcon />}
-                >
-                    刪除
                 </Button>
             )
         },
@@ -97,16 +122,12 @@ function Listings({ currentUser }) {
                     variant="outlined"
                     color="info"
                     onClick={() => handleDelete(params.row.id)}
-                    startIcon = {<TabIcon />}
+                    startIcon={<TabIcon />}
                 >
                     瀏覽
                 </Button>
             )
-        },
-        // {
-        //     field: 'cityId',
-        //     hide: true // 隱藏欄位
-        // }
+        }
     ];
 
     const rows = listings.map((listing) => ({

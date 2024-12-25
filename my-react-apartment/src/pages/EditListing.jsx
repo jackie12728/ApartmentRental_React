@@ -11,7 +11,7 @@ function EditListing() {
         address: "",
         rent: "",
         rentalId: "",
-        imagePaths: null,
+        imagePaths: [],
     });
     const [cities, setCities] = useState([]);       // 縣市列表
     const [districts, setDistricts] = useState([]); // 區域列表
@@ -174,7 +174,6 @@ function EditListing() {
                     type="file"
                     id="imagePaths"
                     name="imagePaths"
-                    multiple
                     onChange={(e) =>
                         setFormData({ ...formData, imagePaths: e.target.files })
                     }

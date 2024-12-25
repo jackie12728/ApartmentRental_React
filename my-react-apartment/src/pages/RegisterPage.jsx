@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from "react-simple-captcha";
 import "./RegisterPage.css";
 
 function RegisterPage({ onRegister }) {
@@ -6,10 +7,24 @@ function RegisterPage({ onRegister }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [captchaInput, setCaptchaInput] = useState('');
+
+    useEffect(() => {
+        // 初始化驗證碼引擎
+        loadCaptchaEnginge(4); // 生成6位數驗證碼
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onRegister(userName, email, password, phoneNumber); // 呼叫 onRegister 進行註冊驗證
+
+        // 驗證驗證碼
+        if (!validateCaptcha(captchaInput)) {
+            alert("驗證碼輸入錯誤，請重試！");
+            return;
+        }
+
+        // 調用 onRegister 並傳遞輸入數據
+        onRegister(userName, email, password, phoneNumber);
     };
 
     return (
@@ -53,12 +68,25 @@ function RegisterPage({ onRegister }) {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="手機號碼"
-                        inputmode="tel"
+                        inputMode="tel"
                         required
                         className="login-input"
-                        maxLength={10}  // 限制輸入最多 10 個字符
-                        pattern="[0-9]*"  // 確保只允許數字輸入
+                        maxLength={10} // 限制輸入最多 10 個字符
+                        pattern="[0-9]*" // 確保只允許數字輸入
                     />
+                    
+                    {/* 圖形驗證碼部分 */}
+                    <LoadCanvasTemplate />
+                    <input
+                        type="text"
+                        placeholder="輸入驗證碼"
+                        value={captchaInput}
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        required
+                        className="login-input"
+                    />
+                    <br />驗證碼有區分大小寫<br /><br />
+
                     <button type="submit" className="login-button">註冊</button>
                 </div>
             </form>
