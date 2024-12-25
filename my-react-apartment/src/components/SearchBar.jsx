@@ -63,7 +63,7 @@ function SearchBar({ isLoggedIn }) {
             setSearchResults(listings); // 更新搜尋結果
             setCurrentPage(0); // 頁碼回到第一頁
         } catch (error) {
-            console.error("搜尋失敗：", error.message);
+            console.error("搜尋失敗：");
             alert("搜尋失敗，請稍後再試！");
         }
     };
@@ -95,7 +95,7 @@ function SearchBar({ isLoggedIn }) {
             addFavorite(listing.id);
             alert("收藏成功！");
         } catch (error) {
-            console.error("錯誤：", error.message);
+            console.error("錯誤：");
             alert("提交收藏時發生錯誤，請稍後再試！");
         }
     };
@@ -111,7 +111,7 @@ function SearchBar({ isLoggedIn }) {
                     console.error("API 返回的縣市數據不是數組");
                 }
             } catch (error) {
-                console.error("獲取縣市失敗:", error.message);
+                console.error("獲取縣市失敗:");
             }
         };
 
@@ -129,7 +129,7 @@ function SearchBar({ isLoggedIn }) {
                     setDistricts([]);
                 }
             } catch (error) {
-                console.error("獲取區域失敗:", error.message);
+                console.error("獲取區域失敗:");
             }
         };
 
@@ -162,7 +162,7 @@ function SearchBar({ isLoggedIn }) {
                 setSearchResults(listings); // 更新搜尋結果
                 setCurrentPage(0); // 頁碼回到第一頁
             } catch (error) {
-                console.error("搜尋失敗：", error.message);
+                console.error("搜尋失敗：");
                 alert("搜尋失敗，請稍後再試！");
             }
         };

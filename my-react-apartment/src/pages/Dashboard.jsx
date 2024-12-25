@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import ProfileInfo from "../components/ProfileInfo";
 import ReservationRecords from "../components/ReservationRecords";
 import FavoriteRecords from "../components/FavoriteRecords";
-import Listings from "../components/Listings";
+import Listings from "../components/ListingsManage";
 import BecomeLandlord from "../components/BecomeLandlord";
 
 function Dashboard({currentUser}) {

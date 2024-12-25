@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import EditListing from "./pages/EditListing";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -38,7 +39,7 @@ function App() {
         const response = await getCurrentUser();
         setCurrentUser(response.data);
       } catch (error) {
-        console.error("無法查詢當前使用者: ", error);
+        console.error("無法查詢當前使用者: ");
       }
     };
 
@@ -124,6 +125,10 @@ function App() {
           <Route 
             path="/dashboard"
             element={<Dashboard currentUser={currentUser} />}
+          />
+          <Route
+            path="/editListing"
+            element={<EditListing />}
           />
         </Routes>
       </div>

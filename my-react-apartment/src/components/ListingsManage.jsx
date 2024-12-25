@@ -11,6 +11,11 @@ import { getUserListing } from "../services/searchService";
 function Listings({ currentUser }) {
     const [listings, setListings] = useState([]); // 房屋資料
 
+    const handleEdit = (row) => {
+        sessionStorage.setItem('editListingData', JSON.stringify(row)); // 存入資料
+        window.open('/editListing', '_blank'); // 開啟新分頁
+    };
+
     // 獲取房屋資料
     useEffect(() => {
         const fetchListings = async () => {
@@ -57,7 +62,7 @@ function Listings({ currentUser }) {
                 <Button
                     variant="outlined"
                     color="success"
-                    onClick={() => handleDelete(params.row.id)}
+                    onClick={() => handleEdit(params.row)}
                     startIcon = {<AutoFixHighIcon />}
                 >
                     編輯
@@ -97,7 +102,11 @@ function Listings({ currentUser }) {
                     瀏覽
                 </Button>
             )
-        }
+        },
+        // {
+        //     field: 'cityId',
+        //     hide: true // 隱藏欄位
+        // }
     ];
 
     const rows = listings.map((listing) => ({
@@ -105,6 +114,12 @@ function Listings({ currentUser }) {
         listingname: listing.listingname,
         address: listing.address,
         rent: Number(listing.rent).toLocaleString('zh-TW'), // 格式化為千分位
+        description: listing.description,
+        cityId: listing.cityId,
+        regionId: listing.regionId,
+        userId: listing.userId,
+        rentalId: listing.rentalId,
+        imagePaths: listing.imagePaths
     }));
 
     const paginationModel = { page: 0, pageSize: 5 };
