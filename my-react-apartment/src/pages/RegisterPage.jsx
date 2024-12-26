@@ -9,11 +9,6 @@ function RegisterPage({ onRegister }) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [captchaInput, setCaptchaInput] = useState('');
 
-    useEffect(() => {
-        // 初始化驗證碼引擎
-        loadCaptchaEnginge(4); // 生成6位數驗證碼
-    }, []);
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -26,6 +21,11 @@ function RegisterPage({ onRegister }) {
         // 調用 onRegister 並傳遞輸入數據
         onRegister(userName, email, password, phoneNumber);
     };
+
+    useEffect(() => {
+        // 初始化驗證碼引擎
+        loadCaptchaEnginge(4); // 生成4位數驗證碼
+    }, []);
 
     return (
         <div className="login-container">

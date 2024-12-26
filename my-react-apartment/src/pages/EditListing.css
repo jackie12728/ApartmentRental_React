@@ -54,3 +54,8 @@
 .edit-listing-form button:hover {
     background-color: #218838;
 }
+
+.image-preview-container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}

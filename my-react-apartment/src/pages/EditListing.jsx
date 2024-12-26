@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllCities, getRegions } from "../services/searchService";
 import "./EditListing.css";
+import axios from "axios";
 
 function EditListing() {
     const [formData, setFormData] = useState({
@@ -15,15 +16,60 @@ function EditListing() {
     });
     const [cities, setCities] = useState([]);       // 縣市列表
     const [districts, setDistricts] = useState([]); // 區域列表
+    const [previewImages, setPreviewImages] = useState([]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Submitted Data:", formData);
+
+        try {
+            const formDataToSend = new FormData();
+
+            // 添加基本表單數據
+            Object.keys(formData).forEach(key => {
+                if (key !== 'imagePaths') {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+
+            // 添加圖片文件
+            Array.from(formData.imagePaths).forEach((file, index) => {
+                formDataToSend.append(`images`, file);
+            });
+
+            // 發送到後端API
+            const response = await axios.post('/api/listings', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                alert('更新成功！');
+                // 清理預覽圖片的URL
+                previewImages.forEach(url => URL.revokeObjectURL(url));
+            }
+        } catch (error) {
+            console.error('提交失敗:', error);
+            alert('更新失敗，請稍後再試。');
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setFormData(prev => ({
+            ...prev,
+            imagePaths: files
+        }));
+
+        // 生成預覽圖片
+        const previews = files.map(file => URL.createObjectURL(file));
+        setPreviewImages(previews);
     };
 
     useEffect(() => {
@@ -169,16 +215,29 @@ function EditListing() {
             </div>
 
             <div className="form-field">
-                <label htmlFor="imagePaths">圖片路徑</label>
+                <label htmlFor="imagePaths">上傳圖片</label>
                 <input
                     type="file"
                     id="imagePaths"
                     name="imagePaths"
-                    onChange={(e) =>
-                        setFormData({ ...formData, imagePaths: e.target.files })
-                    }
+                    onChange={handleImageChange}
+                    multiple
+                    accept="image/*"
                 />
             </div>
+
+            {previewImages.length > 0 && (
+                <div className="image-preview-container">
+                    <h3>圖片預覽</h3>
+                    <div className="image-preview-grid">
+                        {previewImages.map((url, index) => (
+                            <div key={index} className="image-preview-item">
+                                <img src={url} alt={`預覽 ${index + 1}`} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <button type="submit">提交變更</button>
         </form>

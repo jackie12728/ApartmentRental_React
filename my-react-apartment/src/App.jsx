@@ -68,6 +68,7 @@ function App() {
 
       if (data.message === "註冊成功") {
         alert("註冊成功");
+        // 把code存在cookie可以設時間 / sessionstorage
         window.location.href = "/login";
       } else {
         alert("註冊失敗");
