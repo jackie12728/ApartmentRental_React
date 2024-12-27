@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from "react-simple-captcha";
+import { getVerificationCode, verifyCode } from '../services/verificationService';
+import IconButton from '@mui/material/IconButton';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import "./RegisterPage.css";
 
 function RegisterPage({ onRegister }) {
@@ -7,25 +9,50 @@ function RegisterPage({ onRegister }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [captchaInput, setCaptchaInput] = useState('');
+    const [uuid, setUuid] = useState('');
+    const [verificationImage, setVerificationImage] = useState('');
+    const [userInput, setUserInput] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // 驗證驗證碼
-        if (!validateCaptcha(captchaInput)) {
-            alert("驗證碼輸入錯誤，請重試！");
-            return;
+    const fetchVerificationCode = async () => {
+        try {
+            const result = await getVerificationCode();
+            if (result.status == "200") {
+                setUuid(result.data.uuid);
+                setVerificationImage(result.data.code);
+            } else {
+                // 處理錯誤
+                console.error(result.message);
+            }
+        } catch (error) {
+            console.error('獲取驗證碼失敗:', error);
         }
-
-        // 調用 onRegister 並傳遞輸入數據
-        onRegister(userName, email, password, phoneNumber);
     };
 
     useEffect(() => {
-        // 初始化驗證碼引擎
-        loadCaptchaEnginge(4); // 生成4位數驗證碼
+        // 組件加載時獲取驗證碼
+        fetchVerificationCode();
     }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const result = await verifyCode(uuid, userInput);
+            if (result.status == "200") {
+                onRegister(userName, email, password, phoneNumber);
+                // 驗證成功處理
+                console.log('驗證成功');
+            } else {
+                // 驗證失敗處理
+                console.error('驗證失敗:');
+                alert("驗證碼輸入錯誤，請重試！");
+                // 重新獲取驗證碼
+                fetchVerificationCode();
+            }
+        } catch (error) {
+            console.error('驗證失敗:', error);
+        }
+    };
 
     return (
         <div className="login-container">
@@ -35,12 +62,13 @@ function RegisterPage({ onRegister }) {
                     <label htmlFor="userName"></label>
                     <input
                         type="text"
-                        id="userName"
+                        id="username"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                         required
                         placeholder="用戶名稱"
                         className="login-input"
+                        autoComplete="username"
                     />
                     <label htmlFor="email"></label>
                     <input
@@ -51,6 +79,7 @@ function RegisterPage({ onRegister }) {
                         required
                         placeholder="電子郵件地址"
                         className="login-input"
+                        autoComplete="email"
                     />
                     <label htmlFor="password"></label>
                     <input
@@ -61,6 +90,7 @@ function RegisterPage({ onRegister }) {
                         placeholder="密碼"
                         required
                         className="login-input"
+                        autoComplete="current-password"
                     />
                     <input
                         type="tel"
@@ -74,18 +104,23 @@ function RegisterPage({ onRegister }) {
                         maxLength={10} // 限制輸入最多 10 個字符
                         pattern="[0-9]*" // 確保只允許數字輸入
                     />
-                    
-                    {/* 圖形驗證碼部分 */}
-                    <LoadCanvasTemplate />
+
+                    <br /><br /><br />
+                    <img src={verificationImage} alt="驗證碼" />
+                    <IconButton color="primary" aria-label="重新整理按鈕" onClick={fetchVerificationCode}>
+                        <RefreshIcon />
+                    </IconButton>
+
+                    <br />
                     <input
                         type="text"
-                        placeholder="輸入驗證碼"
-                        value={captchaInput}
-                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        placeholder="請輸入驗證碼"
                         required
                         className="login-input"
                     />
-                    <br />驗證碼有區分大小寫<br /><br />
+                    <br /><br /><br />
 
                     <button type="submit" className="login-button">註冊</button>
                 </div>

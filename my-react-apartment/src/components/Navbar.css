@@ -31,9 +31,8 @@
     text-decoration: underline;
   }
   
-  .navbar-username {
+  li {
     color: #000;
     display: flex;
     align-items: center;  /* 垂直置中 */
   }
-  
