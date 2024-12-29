@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ReservationRecords.css";
 import { DataGrid } from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Button from '@mui/material/Button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -16,6 +17,10 @@ function Listings({ currentUser }) {
     const handleEdit = (row) => {
         sessionStorage.setItem('editListingData', JSON.stringify(row)); // 存入資料
         window.open('/editListing', '_blank'); // 開啟新分頁
+    };
+
+    const handleCreate = () => {
+        window.open('/createListing', '_blank'); // 開啟新分頁
     };
 
     // 獲取房屋資料
@@ -111,23 +116,23 @@ function Listings({ currentUser }) {
                 </Button>
             )
         },
-        {
-            field: 'browse',
-            headerName: '瀏覽房屋',
-            width: 110,
-            headerAlign: 'center',
-            align: 'center',
-            renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    color="info"
-                    onClick={() => handleDelete(params.row.id)}
-                    startIcon={<TabIcon />}
-                >
-                    瀏覽
-                </Button>
-            )
-        }
+        // {
+        //     field: 'browse',
+        //     headerName: '瀏覽房屋',
+        //     width: 110,
+        //     headerAlign: 'center',
+        //     align: 'center',
+        //     renderCell: (params) => (
+        //         <Button
+        //             variant="outlined"
+        //             color="info"
+        //             onClick={() => handleDelete(params.row.id)}
+        //             startIcon={<TabIcon />}
+        //         >
+        //             瀏覽
+        //         </Button>
+        //     )
+        // }
     ];
 
     const rows = listings.map((listing) => ({
@@ -163,6 +168,15 @@ function Listings({ currentUser }) {
         <div className="reservation-records">
             <h2>房屋列表</h2>
             <br />
+            <Button
+                variant="outlined"
+                color="info"
+                onClick={() => handleCreate()}
+                startIcon={<AddIcon />}
+            >
+                建立房屋
+            </Button>
+            <br /><br />
             {DataTable()}
         </div>
     );

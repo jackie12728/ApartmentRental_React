@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -129,6 +130,10 @@ function App() {
           <Route
             path="/editListing"
             element={<EditListing />}
+          />
+          <Route
+            path="/createListing"
+            element={<CreateListing  currentUser={currentUser} />}
           />
         </Routes>
       </div>

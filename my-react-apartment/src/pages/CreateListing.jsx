@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getAllCities, getRegions } from "../services/searchService";
-import { modifyListing } from "../services/listingService";
-import "./EditListing.css";
+import { saveListing } from "../services/listingService";
+import "./CreateListing.css";
 
-function EditListing() {
+function CreateListing({currentUser}) {
     const [formData, setFormData] = useState({
         listingname: "",
         description: "",
@@ -16,7 +16,7 @@ function EditListing() {
     });
     const [cities, setCities] = useState([]);       // 縣市列表
     const [districts, setDistricts] = useState([]); // 區域列表
-    // const [previewImages, setPreviewImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -25,30 +25,56 @@ function EditListing() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
             const formDataToSend = new FormData();
-
-            // 添加基本表單數據
-            Object.keys(formData).forEach(key => {
-                if (key !== 'imagePaths') {
-                    formDataToSend.append(key, formData[key]);
-                }
+    
+            // 將 listing 資料轉換為 JSON 並添加到 FormData
+            const listingData = {
+                listingname: formData.listingname,
+                description: formData.description,
+                cityId: formData.cityId,
+                regionId: formData.regionId,
+                address: formData.address,
+                rent: formData.rent,
+                userId: Number(currentUser.id),
+                rentalId: formData.rentalId
+            };
+            console.log("Submitted Data:", listingData);
+    
+            formDataToSend.append('listing', new Blob([JSON.stringify(listingData)], {
+                type: 'application/json'
+            }));
+    
+            // 添加圖片文件
+            Array.from(formData.imagePaths).forEach((file) => {
+                formDataToSend.append('images', file);
             });
-
-            // 發送到後端API
-            const response = await modifyListing(formData.id, formData.listingname, 
-                formData.description, formData.cityId, formData.regionId, formData.address, 
-                formData.rent, formData.rentalId
-            );
-
-            if (response.status === 200) {
-                alert('更新成功！');
+    
+            // 使用 saveListing API
+            const response = await saveListing(formDataToSend);
+    
+            if (response.data) {
+                alert('新增成功！');
+                // 清理預覽圖片的URL
+                previewImages.forEach(url => URL.revokeObjectURL(url));
             }
         } catch (error) {
-            console.error('提交失敗:');
+            console.error('提交失敗:', error);
             alert('更新失敗，請稍後再試。');
         }
+    };
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setFormData(prev => ({
+            ...prev,
+            imagePaths: files
+        }));
+
+        // 生成預覽圖片
+        const previews = files.map(file => URL.createObjectURL(file));
+        setPreviewImages(previews);
     };
 
     useEffect(() => {
@@ -107,7 +133,6 @@ function EditListing() {
                     type="text"
                     id="listingname"
                     name="listingname"
-                    value={formData.listingname}
                     onChange={handleInputChange}
                 />
             </div>
@@ -117,7 +142,6 @@ function EditListing() {
                 <textarea
                     id="description"
                     name="description"
-                    value={formData.description}
                     onChange={handleInputChange}
                 ></textarea>
             </div>
@@ -127,7 +151,6 @@ function EditListing() {
                 <select
                     id="cityId"
                     name="cityId"
-                    value={formData.cityId}
                     onChange={handleInputChange}
                 >
                     <option value="">選擇縣市</option>
@@ -144,7 +167,6 @@ function EditListing() {
                 <select
                     id="regionId"
                     name="regionId"
-                    value={formData.regionId}
                     onChange={handleInputChange}
                 >
                     <option value="">選擇區域</option>
@@ -162,7 +184,6 @@ function EditListing() {
                     type="text"
                     id="address"
                     name="address"
-                    value={formData.address}
                     onChange={handleInputChange}
                 />
             </div>
@@ -173,7 +194,6 @@ function EditListing() {
                     type="number"
                     id="rent"
                     name="rent"
-                    value={formData.rent.replace(/,/g, '')}
                     onChange={handleInputChange}
                 />
             </div>
@@ -183,7 +203,6 @@ function EditListing() {
                 <select
                     id="rentalId"
                     name="rentalId"
-                    value={formData.rentalId}
                     onChange={handleInputChange}
                 >
                     <option value="">選擇狀態</option>
@@ -193,9 +212,34 @@ function EditListing() {
                 </select>
             </div>
 
+            <div className="form-field">
+                <label htmlFor="imagePaths">上傳圖片</label>
+                <input
+                    type="file"
+                    id="imagePaths"
+                    name="imagePaths"
+                    onChange={handleImageChange}
+                    multiple
+                    accept="image/*"
+                />
+            </div>
+
+            {previewImages.length > 0 && (
+                <div className="image-preview-container">
+                    <h3>圖片預覽</h3>
+                    <div className="image-preview-grid">
+                        {previewImages.map((url, index) => (
+                            <div key={index} className="image-preview-item">
+                                <img src={url} alt={`預覽 ${index + 1}`} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <button type="submit">提交變更</button>
         </form>
     );
 }
 
-export default EditListing;
+export default CreateListing;

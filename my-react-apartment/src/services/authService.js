@@ -122,3 +122,48 @@ export const updateUserPhoneNumber = async (id, phoneNumber) => {
 
   return response.json();
 }
+
+/**
+ * 寄送驗證碼
+ * @param {string} recipientEmail 註冊者的 Email
+ * @returns {Promise<Object>} 包含寄送成功與否的 API 回應
+ */
+export const sendVerification = async (recipientEmail) => {
+  const response = await fetch(`${API_BASE_URL}/auth/sendVerification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    credentials: "include",
+    body: recipientEmail.toString()
+  });
+
+  if(!response.ok) {
+    throw new Error("驗證碼寄送失敗");
+  }
+
+  return response.json();
+};
+
+/**
+ * 驗證驗證碼
+ * @param {string} email // 註冊者的 Email
+ * @param {string} code // 驗證碼
+ * @returns {Promise<Object} 包含驗證成功與否的 API 回應
+ */
+export const validateCode = async (email, code) => {
+  const response = await fetch(`${API_BASE_URL}/auth/validateCode`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify( {email, code} )
+  });
+
+  if (!response.ok) {
+    throw new Error("驗證失敗");
+  }
+
+  return response.json();
+};
