@@ -118,7 +118,7 @@ function ReservationRecords({ currentUser }) {
 
     return (
         <div className="reservation-records">
-            <h2>預約看房紀錄</h2>
+            <h2>預約紀錄</h2>
             <br />
             {DataTable()}
         </div>

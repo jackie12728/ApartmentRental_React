@@ -6,7 +6,7 @@ function Sidebar({ setCurrentTab, currentUser }) {
         <div className="sidebar">
             <ul>
                 <li onClick={() => setCurrentTab("profile")}>個人資訊</li>
-                <li onClick={() => setCurrentTab("reservations")}>預約看房紀錄</li>
+                <li onClick={() => setCurrentTab("reservations")}>預約紀錄</li>
                 <li onClick={() => setCurrentTab("favorites")}>收藏紀錄</li>
                 {currentUser.permissionId === 2 && (
                     <li onClick={() => setCurrentTab("listings")}>房屋管理</li>

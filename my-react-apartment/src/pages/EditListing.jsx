@@ -26,6 +26,8 @@ function EditListing() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log("formData: ", formData);
+
         try {
             const formDataToSend = new FormData();
 
@@ -36,17 +38,20 @@ function EditListing() {
                 }
             });
 
+            const replaceRent = parseFloat(formData.rent.replace(/,/g, ''));
+            console.log("formData.rent: ", replaceRent);
+
             // 發送到後端API
             const response = await modifyListing(formData.id, formData.listingname, 
                 formData.description, formData.cityId, formData.regionId, formData.address, 
-                formData.rent, formData.rentalId
+                replaceRent, formData.rentalId
             );
 
             if (response.status === 200) {
                 alert('更新成功！');
             }
         } catch (error) {
-            console.error('提交失敗:');
+            console.error('提交失敗:', error);
             alert('更新失敗，請稍後再試。');
         }
     };
