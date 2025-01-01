@@ -9,16 +9,22 @@ function FavoriteRecords({ currentUser }) {
     const [favorites, setFavorites] = useState([]); // 收藏紀錄
 
     // 刪除收藏紀錄
-    const handleDelete = async (id) => {
-        try {
-            await removeFavorite(id); // 呼叫刪除 API
-            setFavorites((prevFavorites) => prevFavorites.filter(fav => fav.id !== id)); // 從列表中移除
-            alert("刪除成功！");
-        } catch (error) {
-            console.error("刪除失敗：", error.message);
-            alert("刪除失敗，請稍後再試！");
-        }
-    };
+const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("確定要刪除此收藏紀錄嗎？");
+    if (!confirmDelete) {
+        return; // 使用者取消操作
+    }
+    
+    try {
+        await removeFavorite(id); // 呼叫刪除 API
+        setFavorites((prevFavorites) => prevFavorites.filter(fav => fav.id !== id)); // 從列表中移除
+        alert("刪除成功！");
+    } catch (error) {
+        console.error("刪除失敗：", error.message);
+        alert("刪除失敗，請稍後再試！");
+    }
+};
+
 
     const columns = [
         {
